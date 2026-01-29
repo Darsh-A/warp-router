@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+LAN_IF="enp4s0f3u2"
+WARP_IF="CloudflareWARP"
+
+echo "[+] Enabling IP forwarding"
+sysctl -w net.ipv4.ip_forward=1 >/dev/null
+
+echo "[+] Clearing old iptables rules"
+iptables -F
+iptables -t nat -F
+
+echo "[+] Adding NAT + forward rules for WARP"
+iptables -t nat -A POSTROUTING -o "$WARP_IF" -j MASQUERADE
+iptables -A FORWARD -i "$LAN_IF" -o "$WARP_IF" -j ACCEPT
+iptables -A FORWARD -i "$WARP_IF" -o "$LAN_IF" -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+echo "[+] Connecting Cloudflare WARP"
+warp-cli connect
+
+echo "[✓] WARP sharing ENABLED"

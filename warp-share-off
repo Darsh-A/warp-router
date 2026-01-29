@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+echo "[+] Disconnecting Cloudflare WARP"
+warp-cli disconnect || true
+
+echo "[+] Clearing iptables rules"
+iptables -F
+iptables -t nat -F
+
+echo "[+] Disabling IP forwarding"
+sysctl -w net.ipv4.ip_forward=0 >/dev/null
+
+echo "[✓] WARP sharing DISABLED"

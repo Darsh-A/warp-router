@@ -424,7 +424,7 @@ For browsers, combine with a client-side blocker (e.g. uBlock Origin).
 
 All commands above can be automated.
 
-This guide assumes an **automation script** (to be attached separately) that:
+This guide assumes an [automation script](https://github.com/Darsh-A/warp-router/blob/main/warp-share-on) that:
 
 - enables forwarding
 - applies NAT rules
